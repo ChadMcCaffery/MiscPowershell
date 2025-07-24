@@ -1,10 +1,14 @@
-﻿#-------------------------------------------------------------------------------
-# Copyright (c) Microsoft Corporation.  All rights reserved.
-# Licensed under the MIT License.
-#-------------------------------------------------------------------------------
+﻿<#PSScriptInfo
+.VERSION 2019.03.05
+.GUID f6e1f1c3-064b-4748-8762-6eb623c2b274
+.AUTHOR Chad McCaffery
+.LICENSEURI https://unlicense.org
+.PROJECTURI https://github.com/ChadMcCaffery/MiscPowershell
+.REQUIREDSCRIPTS Read-IniFile.ps1
+#>
 <#
-.SYNOPSIS
-    Returns an object representing the specified .inf file
+.DESCRIPTION
+    Reads an INF file and returns an object containing the parsed sections and entries.
 #>
 [CmdletBinding()]
 param(
@@ -25,6 +29,12 @@ param(
     # Adds debugging information to the returned object
     [switch] $AddDebugInfo
 )
+
+$ReadIniFileCommand = Get-Command -Name Read-IniFile -ErrorAction Ignore
+if ($null -eq $ReadIniFileCommand) {
+    $thisScript = Join-Path -Path $PSScriptRoot -ChildPath $MyInvocation.ScriptName
+    $uri = (Test-PSScriptFileInfo -Path $thisScript -ErrorAction Ignore).Link
+}
 
 filter Remove-ExtraWhitespace {$_ -replace '^["\s]*|["\s]*$',''}
 filter ConvertTo-FlatCollection {$_ | Remove-ExtraWhitespace | ForEach-Object {$_ -split '\s*,\s*'}}
@@ -233,7 +243,7 @@ finally {
 
 $processedSections = @()
 $infPath = Convert-Path -Path $Path
-$iniObject = . $PSScriptRoot\Read-IniFile.ps1 -Path $infPath
+$iniObject = . $ReadIniFileCommand -Path $infPath
 
 $StringTable = @{
     '65535' = ''
@@ -516,3 +526,12 @@ foreach ($modelItem in $iniObject.Manufacturer.GetEnumerator()) {
 }
 
 $resultObject
+
+<#
+.SYNOPSIS
+    Returns an object representing the specified .INF file
+.DESCRIPTION
+    Reads an INF file and returns an object containing the parsed sections and entries.
+.LINK
+    https://github.com/ChadMcCaffery/MiscPowershell
+#>

@@ -1,13 +1,14 @@
-﻿#-------------------------------------------------------------------------------
-# Copyright (c) Microsoft Corporation.  All rights reserved.
-# Licensed under the MIT License.
-#-------------------------------------------------------------------------------
+﻿<#PSScriptInfo
+.VERSION 2019.03.05
+.GUID 746aec38-d4b1-4161-a17c-0ec03d921a1f
+.AUTHOR Chad McCaffery
+.LICENSEURI https://unlicense.org
+.PROJECTURI https://github.com/ChadMcCaffery/MiscPowershell
+#>
 <#
-.SYNOPSIS
-    Reads INI-style files and returns an object 
-
-.PARAMETER Path
-    Path to file
+.DESCRIPTION
+    Reads INI-style files and returns a hashtable where each [section] is a
+    top-level key whose value is another hashtable of name=value pairs
 #>
 param(
     [Parameter(Mandatory)]
@@ -129,3 +130,13 @@ switch -regex ($fileContent) {
 }
 
 $ResultObject
+
+<#
+.SYNOPSIS
+    Returns objects from the contents of INI-style configuration files
+.DESCRIPTION
+    Reads INI-style files and returns a hashtable where each [section] is a
+    top-level key whose value is another hashtable of name=value pairs.
+.LINK
+    https://github.com/ChadMcCaffery/MiscPowershell
+#>
